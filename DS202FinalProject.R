@@ -1,4 +1,6 @@
-setwd("C:/Users/Chris/OneDrive/Desktop/archive")
+library(ggplot2)
+library(dplyr)
+
 airbnb_data <- read.csv("Airbnb_Data_ChrisDraper.csv")
 head(airbnb_data)  
 str(airbnb_data)   
@@ -101,7 +103,6 @@ chicago_data_filtered$property_type <- factor(chicago_data_filtered$property_typ
 levels(chicago_data_filtered$property_type)
 ########################################################################
 
-library(ggplot2)
 
 ggplot(chicago_data_filtered, aes(x = property_type, y = combined_score, fill = property_type)) +
   geom_boxplot() +
@@ -115,7 +116,6 @@ ggplot(chicago_data_filtered, aes(x = property_type, y = combined_score, fill = 
 
 #####################################################################
 
-library(ggplot2)
 
 ggplot(chicago_data_filtered, aes(x = room_type, y = combined_score, fill = room_type)) +
   geom_boxplot() +
@@ -132,7 +132,6 @@ room_property_table <- table(chicago_data_filtered$room_type, chicago_data_filte
 
 print(room_property_table)
 
-library(ggplot2)
 ggplot(data = as.data.frame(room_property_table), aes(x = Var2, y = Freq, fill = Var1)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Count of Room Types by Property Type",
@@ -142,6 +141,153 @@ ggplot(data = as.data.frame(room_property_table), aes(x = Var2, y = Freq, fill =
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+###################################################################
+
+ggplot(chicago_data_filtered, aes(x = combined_score, y = log_price)) +
+  geom_point(aes(color = room_type), alpha = 0.5) +
+  labs(title = "Scatter Plot of Log Price by Combined Score",
+       x = "Combined Score",
+       y = "Log Price",
+       color = "Room Type") +
+  theme_minimal() +
+  theme(legend.position = "right")
+
+###################################################################
+
+filtered_data <- chicago_data_filtered %>%
+  filter(room_type == "Entire home/apt", 
+         property_type %in% c("Apartment", "Condominium", "House"))
+
+mean_scores_by_accommodates <- filtered_data %>%
+  group_by(accommodates) %>%
+  summarise(mean_combined_score = mean(combined_score, na.rm = TRUE))
+
+ggplot(mean_scores_by_accommodates, aes(x = factor(accommodates), y = mean_combined_score, fill = factor(accommodates))) +
+  geom_bar(stat = "identity") +
+  labs(title = "Mean Combined Score by Accommodates for Entire Homes/Apts",
+       subtitle = "Filtered by Property Types: Apartment, Condominium, House",
+       x = "Accommodates",
+       y = "Mean Combined Score") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none")
+
+####################################################################
+
+
+filtered_data <- chicago_data_filtered %>%
+  filter(room_type == "Entire home/apt", 
+         property_type %in% c("Apartment", "Condominium", "House"))
+
+ggplot(filtered_data, aes(x = combined_score, y = accommodates)) +
+  geom_point(aes(color = property_type), alpha = 0.6) +
+  labs(title = "Scatter Plot of Combined Score vs. Accommodates",
+       subtitle = "Filtered by Property Types: Apartment, Condominium, House",
+       x = "Combined Score",
+       y = "Accommodates") +
+  scale_color_manual(values = c("Apartment" = "blue", "Condominium" = "green", "House" = "red")) +
+  theme_minimal() +
+  theme(legend.title = element_blank(),
+        legend.position = "bottom")
+
+#######################################################################
+
+filtered_data <- chicago_data_filtered %>%
+  filter(room_type == "Entire home/apt", 
+         property_type %in% c("Apartment", "Condominium", "House"))
+
+ggplot(filtered_data, aes(x = log_price, y = accommodates)) +
+  geom_point(aes(color = property_type), alpha = 0.6) +
+  labs(title = "Scatter Plot of log_price vs. Accommodates",
+       subtitle = "Filtered by Property Types: Apartment, Condominium, House",
+       x = "log_price",
+       y = "Accommodates") +
+  scale_color_manual(values = c("Apartment" = "blue", "Condominium" = "green", "House" = "red")) +
+  theme_minimal() +
+  theme(legend.title = element_blank(),
+        legend.position = "bottom")
+
+########################################################################
+
+filtered_data <- chicago_data_filtered %>%
+  filter(room_type == "Entire home/apt", 
+         property_type %in% c("Apartment", "Condominium", "House"))
+
+ggplot(filtered_data, aes(x = log_price, y = accommodates)) +
+  geom_point(aes(color = property_type), alpha = 0.6) +  
+  geom_smooth(method = "lm", se = TRUE, color = "black") +  
+  labs(title = "Scatter Plot of log_price vs. Accommodates",
+       subtitle = "Filtered by Property Types: Apartment, Condominium, House",
+       x = "log_price",
+       y = "Accommodates") +
+  scale_color_manual(values = c("Apartment" = "blue", "Condominium" = "green", "House" = "red")) +
+  theme_minimal() +
+  theme(legend.title = element_blank(),
+        legend.position = "bottom")
+
+##############################
+
+top_zipcodes <- filtered_data %>%
+  group_by(zipcode) %>%
+  summarise(Count = n()) %>%
+  top_n(10, Count) %>%
+  pull(zipcode)
+
+filtered_data_top_zipcodes <- filtered_data %>%
+  filter(zipcode %in% top_zipcodes)
+
+filtered_data_top_zipcodes$zipcode <- factor(filtered_data_top_zipcodes$zipcode, levels = top_zipcodes)
+
+ggplot(filtered_data_top_zipcodes, aes(x = zipcode, y = combined_score)) +
+  geom_boxplot(fill = "skyblue", outlier.color = "red", outlier.shape = 1) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Box Plot of Combined Score by Zipcode",
+       x = "Zipcode",
+       y = "Combined Score")
+
+###############################
+
+filtered_data <- filtered_data %>% 
+  filter(!is.na(bathrooms) & !is.na(combined_score))
+
+ggplot(filtered_data, aes(x = bathrooms, y = combined_score)) +
+  geom_point(alpha = 0.6, color = "blue") + 
+  theme_minimal() +
+  labs(title = "Scatter Plot of Combined Score vs. Bathrooms",
+       x = "Number of Bathrooms",
+       y = "Combined Score")
+
+#####
+
+filtered_data <- filtered_data %>%
+  filter(!is.na(bedrooms) & !is.na(combined_score))
+
+ggplot(filtered_data, aes(x = bedrooms, y = combined_score)) +
+  geom_point(alpha = 0.6, color = "green") +
+  theme_minimal() +
+  labs(title = "Scatter Plot of Combined Score vs. Bedrooms",
+       x = "Number of Bedrooms",
+       y = "Combined Score")
+
+#############
+
+library(dplyr)
+library(ggplot2)
+
+if(all(c("log_price", "property_type", "accommodates", "bathrooms", "bed_type", "bedrooms", "combined_score") %in% names(filtered_data))) {
+  
+  filtered_data$property_type <- as.factor(filtered_data$property_type)
+  filtered_data$bed_type <- as.factor(filtered_data$bed_type)
+  
+  model <- lm(combined_score ~ log_price + property_type + accommodates + bathrooms + bed_type + bedrooms, 
+              data = filtered_data)
+  
+  summary_model <- summary(model)
+  print(summary_model)
+} else {
+  cat("Error: Not all required variables are present in the dataset.\n")
+}
 
 
 
