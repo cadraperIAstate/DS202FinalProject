@@ -357,10 +357,9 @@ display: none;
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<ul>
-<li>Explore airbnb data in chicago and determine factors that coorelate
-and produce higher rental rates, prices, and renter reviews.</li>
-</ul>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD - Explore airbnb data in chicago
+and determine factors that coorelate and produce higher rental rates,
+prices, and renter reviews.</p>
 <p>Here are my main questions I want to focus on</p>
 <p>What are the best type of properties to own</p>
 <p>Best room types to own</p>
@@ -383,6 +382,16 @@ filtered the data to narrow the results of my dataset down.</p>
 </div>
 <div id="cleaning" class="section level1">
 <h1>cleaning</h1>
+<pre class="r"><code>library(ggplot2)
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
 <pre class="r"><code>airbnb_data &lt;- read.csv(&quot;Airbnb_Data_ChrisDraper.csv&quot;)
 head(airbnb_data)  </code></pre>
 <pre><code>##         id log_price property_type       room_type  X accommodates bathrooms
@@ -795,17 +804,6 @@ renters score variables. I multiplied number of reviews and average
 review score together to obtain a combined score metric that weighted
 both the variables into a more fair mertic that I will use to conduct
 further analysis</p>
-<pre class="r"><code>########################################################################
-library(ggplot2)
-library(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
 <pre class="r"><code>ggplot(chicago_data_filtered, aes(x = property_type, y = combined_score, fill = property_type)) +
   geom_boxplot() +
   labs(title = &quot;Box Plot of Combined Scores by Property Type in Chicago&quot;,
@@ -1024,9 +1022,9 @@ if(all(c(&quot;log_price&quot;, &quot;property_type&quot;, &quot;accommodates&qu
 ## F-statistic: 4.504 on 10 and 1214 DF,  p-value: 2.824e-06</code></pre>
 <div id="results" class="section level2">
 <h2>Results</h2>
-<p>Loft is the best property tyoe, however because its so rare to find I
-think its better to declare appartments and houses as the best property
-type.</p>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD Loft is the best property type,
+however because its so rare to find I think its better to declare
+appartments and houses as the best property type.</p>
 <p>The loft property type is very unavaliable and not many exist on the
 airbnb market. However, if you do find one they are heavily rented,
 liked, and have a good price.</p>
@@ -1047,12 +1045,12 @@ better in renting frequency, price, and reviews.</p>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
-<p>In conclusion my analysis shows that in Chicago Homes / appartments
-rthat are located in the northern part of the city and include the
-entire home/appartment in the rental and additionally have 8
-accomodates, 1 - 2 bathrooms, 1 - 3 bedrooms do better in renting
-frequency, price, and rent reviews. This is because AirBnB reqrds
-the</p>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD In conclusion my analysis shows
+that in Chicago Homes / appartments rthat are located in the northern
+part of the city and include the entire home/appartment in the rental
+and additionally have 8 accomodates, 1 - 2 bathrooms, 1 - 3 bedrooms do
+better in renting frequency, price, and rent reviews. This is because
+AirBnB reqrds the</p>
 </div>
 </div>
 

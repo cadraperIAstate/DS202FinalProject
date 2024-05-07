@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
+<<<<<<< HEAD
 - Explore airbnb data in chicago and determine factors that coorelate and produce higher rental rates, prices, and renter reviews. 
 
 Here are my main questions I want to focus on
@@ -36,6 +37,9 @@ I also removed outliers through IQR
 # cleaning
 
 ```{r}
+library(ggplot2)
+library(dplyr)
+
 airbnb_data <- read.csv("Airbnb_Data_ChrisDraper.csv")
 head(airbnb_data)  
 str(airbnb_data)   
@@ -151,10 +155,6 @@ I also created a new metric to weigh the Renting frequency and renters score var
 
 
 ```{r}
-########################################################################
-library(ggplot2)
-library(dplyr)
-
 ggplot(chicago_data_filtered, aes(x = property_type, y = combined_score, fill = property_type)) +
   geom_boxplot() +
   labs(title = "Box Plot of Combined Scores by Property Type in Chicago",
@@ -339,11 +339,13 @@ if(all(c("log_price", "property_type", "accommodates", "bathrooms", "bed_type", 
 } else {
   cat("Error: Not all required variables are present in the dataset.\n")
 }
+
 ```
 
 ## Results
 
-Loft is the best property tyoe, however because its so rare to find I think its better to declare appartments and houses as the best property type.
+<<<<<<< HEAD
+Loft is the best property type, however because its so rare to find I think its better to declare appartments and houses as the best property type.
 
 The loft property type is very unavaliable and not many exist on the airbnb market. However, if you do find one they are heavily rented,
 liked, and have a good price.
@@ -356,8 +358,8 @@ Zipcodes show to favor the ones that are in the northern part of chicago, near O
 
 
 
-
-
 ## Conclusion
 
+<<<<<<< HEAD
 In conclusion my analysis shows that in Chicago Homes / appartments rthat are located in the northern part of the city and include the entire home/appartment in the rental and additionally have 8 accomodates, 1 - 2 bathrooms, 1 - 3 bedrooms do better in renting frequency, price, and rent reviews. This is because AirBnB reqrds the 
+
